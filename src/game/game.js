@@ -1,27 +1,39 @@
-
+import  makeMatrix from './utilities/makeMatrix';
 import {
-  ALIVE,
-  DEAD
-} from './contatns';
+  STATUSES
+} from './constants';
 
-const makeMatrix = (m, n, initial) => {
-  var a, i, j, mat = [];
-  for (i = 0; i < m; i += 1) {
-    a = [];
-    for (j = 0; j < n; j += 1) {
-      a[j] = 0;
-    }
-    mat[i] = a;
-  }
-  return mat;
-};
+const {
+  DEAD,
+  BORN,
+  ALIVE,
+  PROSPER,
+  CORPSE
+} = STATUSES;
 
 const INITIAL_STATE_MOCK = [
-
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5, 9, 16, 32, 11, 13],
+  [1,3,4,5, 11, 15, 13, 29, 31],
+  [1,3,4,5],
+  [1,3,4,5, 11, 45, 22, 43],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5],
+  [1,3,4,5, 23, 25, 17, 23],
+  [1,3,4,5, 12, 43, 22, 21],
+  [1,3,4,5,23,44]
 ];
-
-
-
 
 export default class Game {
   constructor({width, height, size}) {
@@ -29,15 +41,9 @@ export default class Game {
     this.HEIGHT = height/size;
     this.SIZE = size;
 
-    this.STOPPED = 0;
-    this.RUNNING = 1;
-
     this.minimum = 2;
-    this.maximum = 3;
+    this.maximum = 4;
     this.spawn = 3;
-
-    this.state = this.STOPPED;
-    this.interval = null;
 
     this.counter = 0;
 
@@ -47,38 +53,50 @@ export default class Game {
 
 
   _init() {
-    this.matrix = makeMatrix(this.HEIGHT, this.WIDTH, 0);
+    this.matrix = makeMatrix(this.HEIGHT, this.WIDTH, INITIAL_STATE_MOCK);
   }
 
   updateState() {
     var neighbours;
 
-    var nextGenerationGrid = Array.matrix(this.HEIGHT, this.WIDTH, 0);
+    var nextGenerationGrid = makeMatrix(this.HEIGHT, this.WIDTH, 0);
 
     for (var h = 0; h < this.HEIGHT; h++) {
       for (var w = 0; w < this.WIDTH; w++) {
-        neighbours = this.calculateNeighbours(h, w);
-        if (this.grid[h][w] !== DEAD) {
-          if ((neighbours >= this.minimum) &&
-              (neighbours <= this.maximum)) {
+        neighbours = this.getNeighbours(h, w);
+
+        let cell = this.matrix[h][w];
+
+        if (cell !== DEAD) {
+          if (neighbours >= this.minimum && neighbours < this.maximum) {
             nextGenerationGrid[h][w] = ALIVE;
           }
+
+          if (neighbours > this.maximum && neighbours < this.maximum + 2) {
+            nextGenerationGrid[h][w] = PROSPER;
+          }
+
+          if ((neighbours > this.maximum + 2) ) {
+            nextGenerationGrid[h][w] = CORPSE;
+          }
+
         } else {
           if (neighbours === this.spawn) {
-            nextGenerationGrid[h][w] = ALIVE;
+            nextGenerationGrid[h][w] = BORN;
           }
         }
       }
     }
-    this.copyGrid(nextGenerationGrid, this.grid);
+    this.copyGrid(nextGenerationGrid, this.matrix);
     this.counter++;
+    return this.matrix;
   };
 
-  calculateNeighbours(y, x) {
-    var total = (this.grid[y][x] !== DEAD) ? -1 : 0;
+  getNeighbours(y, x) {
+    var total = (this.matrix[y][x] !== DEAD) ? -1 : 0;
     for (var h = -1; h <= 1; h++) {
       for (var w = -1; w <= 1; w++) {
-        if (this.grid
+        if (this.matrix
                 [(this.HEIGHT + (y + h)) % this.HEIGHT]
                 [(this.WIDTH + (x + w)) % this.WIDTH] !== DEAD) {
           total++;
@@ -90,11 +108,6 @@ export default class Game {
 
   copyGrid(source, destination) {
     for (var h = 0; h < this.HEIGHT; h++) {
-      /*
-       for (var w = 0; w < this.WIDTH; w++) {
-       destination[h][w] = source[h][w];
-       }
-       */
       destination[h] = source[h].slice(0);
     }
   };

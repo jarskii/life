@@ -6,8 +6,31 @@
   position: absolute;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .Canvas {
   border: 1px solid #eee;
+}
+
+.Controls {
+  padding: 16px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &Item {
+    text-transform: uppercase;
+    margin: 0 8px
+    padding: 8px 24px
+    border: 1px solid #DADADA;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &:hover {
+      background: #dadada
+      color: #fff;
+      transition: background .3s, color .3s;
+    }
+  }
 }
