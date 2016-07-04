@@ -17,6 +17,7 @@
     "component-css-loader": "git+https://github.com/jarskii/component-css-loader.git",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.22.0",
     "react-hot-loader": "^3.0.0-beta.1",
     "style-loader": "^0.13.1",
     "stylus": "^0.54.5",

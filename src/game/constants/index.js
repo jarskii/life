@@ -1,4 +1,7 @@
-export const DELAY = 250;
+export const DELAY = 40;
+export const DEFAULT_GAME_SIZE = 6;
+export const DEFAULT_GAME_WIDTH = 500;
+export const DEFAULT_GAME_HEIGHT = 500;
 
 export const STATUSES = {
   DEAD: 0,

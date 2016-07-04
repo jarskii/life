@@ -1,14 +1,29 @@
+import getRandom from './getRandom';
+
 export default (m, n, initial) => {
-  var a, i, j, mat = [];
-  for (i = 0; i < m; i += 1) {
-    a = [];
+  var matrix = [];
 
-    let initialRow = initial[i];
+  for (let rowIndex = 0; rowIndex < m; rowIndex++) {
+    let matrixRow = [];
 
-    for (j = 0; j < n; j += 1) {
-      a[j] = (initialRow && initialRow.includes(j)) ? 1 : 0;
+    let initialRow = initial[rowIndex];
+
+    for (let cellIndex = 0; cellIndex < n; cellIndex += 1) {
+      let cell = {
+        status: 0,
+        strength: 0
+      };
+
+      if (initialRow && initialRow.includes(cellIndex)) {
+        cell = {
+          status: 1,
+          strength: getRandom(1, 5)
+        }
+      }
+
+      matrixRow[cellIndex] = cell;
     }
-    mat[i] = a;
+    matrix[rowIndex] = matrixRow;
   }
-  return mat;
+  return matrix;
 };
