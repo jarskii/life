@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 
+import Canvas from './Canvas';
+
 import Game from '../game/game';
+
 
 import {
   FILLS,
@@ -29,7 +32,8 @@ export default class App extends Component {
   _start = false;
 
   componentDidMount() {
-    this._canvas = this.refs.canvas;
+    this._canvas = this.refs.canvas.getElement();
+    console.log(this._canvas);
     this._ctx = this._canvas.getContext('2d');
   }
   _checkOffset(height) {
@@ -160,9 +164,11 @@ export default class App extends Component {
             {'<--- cell size (> 2)'}
           </code>
         </div>
-        <canvas className={s.Canvas} ref="canvas" width={width} height={height}>
-
-        </canvas>
+        <Canvas
+          ref="canvas"
+          width={width}
+          height={height}
+        />
         <div className={s.Controls}>
           <input
               className={s.Input}
